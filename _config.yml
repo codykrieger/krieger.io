@@ -1,4 +1,8 @@
 name: cody krieger
+
 markdown: redcarpet
 pygments: true
+
 exclude: ['Gemfile', 'Gemfile.lock', 'README.md']
+
+permalink: '/:year/:month/:day/:title/'
