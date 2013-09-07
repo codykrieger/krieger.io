@@ -1,0 +1,267 @@
+/*****************************************************************************/
+/*
+/* Mixins and globals
+/*
+/*****************************************************************************/
+
+// COLORS
+
+$red: #c22a09;
+
+// FONTS
+
+$font-size: 22px;
+
+$monospace-font-family: Menlo, Consolas, "Courier New", monospace;
+$serif-font-family: jubilat, serif;
+$sans-serif-font-family: "proxima-nova", Helvetica, Arial, sans-serif;
+
+$header-font-size: 120%;
+
+// METRICS
+
+$page-width: 34em;
+
+/*****************************************************************************/
+/*
+/* Default tag styles
+/*
+/*****************************************************************************/
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body { height: 100%; }
+
+body {
+  background-color: #fff;
+
+  font-family: $serif-font-family;
+  line-height: 1.5em;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $sans-serif-font-family;
+  line-height: 1;
+  a { text-decoration: none; }
+}
+
+h1 {
+  font-size: 1.6em;
+  margin-bottom: 1em;
+}
+
+h2 {
+  font-size: 1.25em;
+}
+
+a {
+  color: $red;
+  &:hover   { color: #000; }
+}
+
+p { margin: 1em 0; }
+
+pre, code {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  font-family: $monospace-font-family;
+  overflow: scroll;
+}
+
+pre {
+  padding: 0 .4em;
+
+  code { border: none; }
+
+  &.terminal {
+    border: 1px solid #000;
+    background-color: #333;
+    color: #FFF;
+
+    code {
+      background-color: #333;
+    }
+  }
+}
+
+code {
+  padding: 0 .2em;
+}
+
+/*****************************************************************************/
+/*
+/* Site
+/*
+/*****************************************************************************/
+
+.site {
+  text-align: justify;
+
+  box-sizing: border-box;
+
+  margin: 0 auto 2em;
+  padding: 2em 0 2em;
+
+  header {
+    font-family: $sans-serif-font-family;
+    font-size: $header-font-size;
+
+    a {
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    h1.title {
+      font-size: inherit;
+      display: inline-block;
+      margin-bottom: 2em;
+
+      a {
+        color: #a00;
+        &:hover { color: #000; }
+      }
+    }
+
+    a.extra {
+      color: #aaa;
+      margin-left: 1em;
+      &:hover { color: #000; }
+    }
+  }
+
+  section.content-body {
+    & > p:first-child {
+      margin-top: 0;
+    }
+  }
+
+  footer {
+    font-family: $sans-serif-font-family;
+    font-size: smaller;
+    color: #666;
+    border-top: 4px solid #eee;
+    margin-top: 2em;
+    overflow: hidden;
+
+    .contact {
+      float: left;
+      margin-right: 3em;
+
+      a {
+        color: #8085C1;
+      }
+    }
+
+    .rss {
+      margin-top: 1.1em;
+      margin-right: -.2em;
+      float: right;
+
+      img {
+        border: 0;
+      }
+    }
+  }
+}
+
+/*****************************************************************************/
+/*
+/* Posts
+/*
+/*****************************************************************************/
+
+article {
+
+  ul, ol {
+    margin-left: 1.35em;
+  }
+}
+
+/*****************************************************************************/
+/*
+/* Common classes
+/*
+/*****************************************************************************/
+
+span, p {
+  &.meta {
+    font-family: $sans-serif-font-family;
+    display: block;
+    color: #aaa;
+    font-size: smaller;
+  }
+}
+
+ul.posts {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  padding-top: 2em;
+  border-top: 4px solid #eee;
+  list-style-type: none;
+}
+
+/*****************************************************************************/
+/*
+/* Mobile devices/smaller screens
+/*
+/*****************************************************************************/
+
+// iPhone
+
+@media only screen and (max-width: 568px) {
+  body {
+    font-size: 100%;
+  }
+
+  .site {
+    padding-left: 2em;
+    padding-right: 2em;
+
+    footer {
+      .contact {
+        margin-right: 1em;
+
+        p {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+// iPad
+
+@media only screen and (max-width: 768px) and (min-width: 569px) {
+  body {
+    font-size: $font-size - 4px;
+  }
+
+  .site {
+    width: $page-width - 4em;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 769px) {
+  body {
+    font-size: $font-size - 2px;
+  }
+
+  .site {
+    width: $page-width - 2em;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  body {
+    font-size: $font-size;
+  }
+
+  .site {
+    width: $page-width;
+  }
+}

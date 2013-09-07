@@ -2,8 +2,8 @@
 layout: default
 ---
 <h2>{{ page.title }}</h2>
-<p class="meta">{{ page.date | date_to_string }}</p>
+<span class="meta">{{ page.date | date_to_long_string }}</span>
 
 <article>
-{{ content }}
+  {{ content }}
 </article>

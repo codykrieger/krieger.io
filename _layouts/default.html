@@ -11,7 +11,7 @@
 
     {% css_asset_tag global %}
     - /_assets/stylesheets/syntax.css.scss
-    - /_assets/stylesheets/main.css.scss
+    - /_assets/stylesheets/styles.css.scss
     {% endcss_asset_tag %}
   </head>
   <body>
@@ -23,9 +23,13 @@
           <a class="extra" href="/">home</a>
         </header>
 
-        {{ content }}
+        {% header_title %}
 
-        <div class="footer">
+        <section class="content-body">
+          {{ content }}
+        </section>
+
+        <footer>
           <div class="contact">
             <p>
               &copy; 2013 cody krieger<br />
@@ -38,7 +42,7 @@
               <a href="http://twitter.com/codykrieger">twitter.com/codykrieger</a>
             </p>
           </div>
-        </div> <!-- /footer -->
+        </footer>
 
       </div>
     </div> <!-- /container -->
