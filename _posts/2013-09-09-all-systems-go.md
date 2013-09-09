@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "All systems go."
-date:   2013-09-09 03:41:00
+date:   2013-09-09 03:41:00-0800
 ---
 
 ### The backstory.
