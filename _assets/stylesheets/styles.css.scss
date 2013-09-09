@@ -70,6 +70,7 @@ pre, code {
   border: 1px solid #ddd;
   background-color: #eef;
   font-family: $monospace-font-family;
+  font-size: 83%;
   overflow: scroll;
 }
 
@@ -91,6 +92,17 @@ pre {
 
 code {
   padding: 0 .2em;
+}
+
+blockquote {
+  padding-left: 1em;
+  border-left: 4px solid #ddd;
+  color: #777;
+  font-style: italic;
+
+  i, em {
+    font-style: normal;
+  }
 }
 
 /*****************************************************************************/
@@ -176,6 +188,7 @@ code {
 /*****************************************************************************/
 
 article {
+  margin-top: 1em;
 
   ul, ol {
     margin-left: 1.35em;
