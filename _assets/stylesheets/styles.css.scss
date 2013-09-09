@@ -132,11 +132,6 @@ blockquote {
       font-size: inherit;
       display: inline-block;
       margin-bottom: 2em;
-
-      a {
-        color: #a00;
-        &:hover { color: #000; }
-      }
     }
 
     a.extra {
