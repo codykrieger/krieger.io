@@ -1,6 +1,11 @@
 require 'bundler/setup'
 require 'stringex'
 
+desc "Generate the site, and regenerate it if anything changes."
+task :watch do
+  exec "bundle exec jekyll serve -w --drafts"
+end
+
 posts_dir       = "_posts"
 new_post_ext    = "md"
 
