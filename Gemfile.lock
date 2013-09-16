@@ -1,15 +1,15 @@
 GIT
   remote: https://github.com/codykrieger/pages-gem.git
-  revision: 85b850d6d578dcc074e8f244540089d6cc73f7ba
+  revision: d6ccc12e763926d055bfc097115f7fbfc4a7bd03
   specs:
-    github-pages (1)
+    github-pages (5)
       RedCloth (= 4.2.9)
-      jekyll (= 1.1.2)
+      jekyll (= 1.2.1)
       kramdown (= 1.0.2)
-      liquid (= 2.5.1)
+      liquid (= 2.5.2)
       maruku (= 0.6.1)
       rdiscount (= 1.6.8)
-      redcarpet (= 2.2.2)
+      redcarpet (= 2.3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -23,22 +23,21 @@ GEM
     directory_watcher (1.4.1)
     fast-stemmer (1.0.2)
     highline (1.6.19)
-    jekyll (1.1.2)
+    jekyll (1.2.1)
       classifier (~> 1.3)
       colorator (~> 0.1)
       commander (~> 4.1.3)
       directory_watcher (~> 1.4.1)
-      kramdown (~> 1.0.2)
-      liquid (~> 2.5.1)
+      liquid (~> 2.5.2)
       maruku (~> 0.5)
       pygments.rb (~> 0.5.0)
-      redcarpet (~> 2.2.2)
+      redcarpet (~> 2.3.0)
       safe_yaml (~> 0.7.0)
     jekyll-asset-pipeline (0.1.2)
       jekyll (>= 0.10.0)
       liquid (>= 1.9.0)
     kramdown (1.0.2)
-    liquid (2.5.1)
+    liquid (2.5.2)
     maruku (0.6.1)
       syntax (>= 1.0.0)
     posix-spawn (0.3.6)
@@ -46,7 +45,7 @@ GEM
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rdiscount (1.6.8)
-    redcarpet (2.2.2)
+    redcarpet (2.3.0)
     safe_yaml (0.7.1)
     sass (3.2.10)
     stringex (2.0.11)
