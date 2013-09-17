@@ -7,7 +7,7 @@ module Jekyll
     def render(context)
       title = context.registers[:page]["header_title"]
       return "" if title.nil? || title.empty?
-      "<h1>#{title}</h1>"
+      "<h2 class='article-or-page-title'>#{title}</h2>"
     end
   end
 end

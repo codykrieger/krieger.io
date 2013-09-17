@@ -123,21 +123,24 @@ blockquote {
     font-family: $sans-serif-font-family;
     font-size: $header-font-size;
 
-    a {
-      font-weight: bold;
-      text-decoration: none;
-    }
-
     h1.title {
       font-size: inherit;
       display: inline-block;
       margin-bottom: 2em;
     }
 
-    a.extra {
-      color: #aaa;
-      margin-left: 1em;
-      &:hover { color: #000; }
+    a {
+      text-decoration: none;
+    }
+
+    nav {
+      display: inline-block;
+
+      a {
+        color: #aaa;
+        margin-left: 1em;
+        &:hover { color: #000; }
+      }
     }
   }
 
@@ -181,6 +184,9 @@ blockquote {
 /* Posts
 /*
 /*****************************************************************************/
+
+h2.article-title {
+}
 
 article {
   margin-top: 1em;
@@ -230,6 +236,27 @@ ul.posts {
     padding-left: 1em;
     padding-right: 1em;
 
+    header {
+      text-align: center;
+
+      h1.title {
+        margin-bottom: 1em;
+      }
+
+      nav {
+        display: block;
+        margin-bottom: 2em;
+
+        a {
+          margin-left: 0;
+
+          & + a {
+            margin-left: 1em;
+          }
+        }
+      }
+    }
+
     footer {
       .contact {
         margin-right: 1em;
@@ -238,6 +265,14 @@ ul.posts {
           margin-bottom: 0;
         }
       }
+    }
+  }
+
+  h2.article-or-page-title {
+    text-align: center;
+
+    & + .meta {
+      text-align: center;
     }
   }
 }

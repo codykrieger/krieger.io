@@ -20,11 +20,13 @@
       <div class="site">
         <header>
           <h1 class="title"><a href="/">{{ site.name }}</a></h1>
+          <nav>
+            <a class="extra" href="/projects/">projects</a>
+          </nav>
         </header>
 
-        {% header_title %}
-
         <section class="content-body">
+          {% header_title %}
           {{ content }}
         </section>
 
