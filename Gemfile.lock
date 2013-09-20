@@ -20,7 +20,9 @@ GEM
     colorator (0.1)
     commander (4.1.5)
       highline (~> 1.6.11)
+    daemons (1.1.9)
     directory_watcher (1.4.1)
+    eventmachine (1.0.3)
     fast-stemmer (1.0.2)
     highline (1.6.19)
     jekyll (1.2.1)
@@ -44,12 +46,20 @@ GEM
     pygments.rb (0.5.2)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
+    rack (1.5.2)
+    rack-contrib (1.1.0)
+      rack (>= 0.9.1)
+    rack-rewrite (1.4.01)
     rdiscount (1.6.8)
     redcarpet (2.3.0)
     safe_yaml (0.7.1)
     sass (3.2.10)
-    stringex (2.0.11)
+    stringex (2.1.0)
     syntax (1.0.0)
+    thin (1.5.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -58,5 +68,8 @@ PLATFORMS
 DEPENDENCIES
   github-pages!
   jekyll-asset-pipeline
+  rack-contrib
+  rack-rewrite
   sass
   stringex
+  thin
