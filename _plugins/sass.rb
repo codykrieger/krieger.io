@@ -1,3 +1,5 @@
+require 'jekyll_asset_pipeline'
+
 module JekyllAssetPipeline
   class SassConverter < JekyllAssetPipeline::Converter
     require 'sass'
