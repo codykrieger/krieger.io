@@ -10,6 +10,10 @@ An [open source](https://github.com/codykrieger/gfxCardStatus) menu bar app for
 dual-GPU MacBook Pros that tells you when apps have turned on the discrete GPU
 (and therefore are using more power).
 
+[heroku-buildpack-jekyll](https://github.com/autock/heroku-buildpack-jekyll)  
+A buildpack for Heroku/Dokku/Deis for auto-generating a Jekyll site on push,
+and then serving up the resulting site.
+
 [ace-rails-ap](https://github.com/codykrieger/ace-rails-ap)  
 The Ajax.org Cloud9 Editor (Ace) for the Rails 3.1+ asset pipeline.
 
