@@ -6,7 +6,7 @@ layout: default
   Hi, I'm Cody. I made <a href="http://gfx.io">gfxCardStatus</a>, and I work on the Safari team at Apple.
 </p>
 
-<!--
+{% if paginator.total_posts > 0 %}
 <ul class="posts">
   {% for post in site.posts %}
     <li>
@@ -15,4 +15,4 @@ layout: default
     </li>
   {% endfor %}
 </ul>
--->
+{% endif %}
