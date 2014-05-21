@@ -162,8 +162,21 @@ blockquote {
       float: left;
       margin-right: 3em;
 
+      & + .contact {
+        float: right;
+        margin-right: 0;
+
+        p {
+          text-align: right;
+        }
+      }
+
       a {
         color: #8085C1;
+      }
+
+      span.label {
+        color: #aaa;
       }
     }
 
