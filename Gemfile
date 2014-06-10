@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'github-pages'
 
-gem 'redcarpet'
 gem 'jekyll-asset-pipeline'
 gem 'sass'
 
