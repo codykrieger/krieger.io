@@ -1,16 +1,17 @@
 source 'https://rubygems.org'
 
+gem 'github-pages'
+
+gem 'jekyll-asset-pipeline'
+gem 'sass'
+
+gem 'stringex'
+
+gem 'puma'
+
 group :development do
-  gem 'github-pages'
-
-  gem 'jekyll-asset-pipeline'
-  gem 'sass'
-
-  gem 'stringex'
-
   gem 'rack-rewrite'
   gem 'rack-contrib'
-  gem 'puma'
 
   gem 'foreman'
 end
