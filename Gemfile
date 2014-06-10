@@ -9,9 +9,9 @@ gem 'stringex'
 
 gem 'puma'
 
-group :development do
-  gem 'rack-rewrite'
-  gem 'rack-contrib'
+gem 'rack-rewrite'
+gem 'rack-contrib'
 
+group :development do
   gem 'foreman'
 end
