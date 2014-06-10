@@ -10,7 +10,7 @@ group :development do
 
   gem 'rack-rewrite'
   gem 'rack-contrib'
-  gem 'thin'
+  gem 'puma'
 
   gem 'foreman'
 end
