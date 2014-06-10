@@ -117,5 +117,6 @@ DEPENDENCIES
   puma
   rack-contrib
   rack-rewrite
+  redcarpet
   sass
   stringex
