@@ -1,10 +1,5 @@
 {
 	"ImportPath": "github.com/codykrieger/krieger.io",
 	"GoVersion": "go1.2.2",
-	"Deps": [
-		{
-			"ImportPath": "github.com/gocraft/web",
-			"Rev": "91f6740db03bb0a8a1c7231e3464124057501a92"
-		}
-	]
+	"Deps": []
 }
