@@ -43,7 +43,8 @@ func main() {
 func rootHandler(w http.ResponseWriter, req *http.Request) {
 	startTime := time.Now()
 
-	path := req.URL.Path
+	host := req.Host
+	path := req.RequestURI
 	scheme := req.Header.Get("X-Forwarded-Proto")
 	if len(scheme) == 0 {
 		scheme = "http"
@@ -51,7 +52,10 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 
 	loggingWriter := &loggingResponseWriter{w, 0}
 
-	if path == "/gfxCardStatus/appcast.xml" {
+	if strings.HasPrefix(host, "www.") {
+		nakedHost := strings.TrimPrefix(host, "www.")
+		http.Redirect(loggingWriter, req, scheme+"://"+nakedHost+path, http.StatusMovedPermanently)
+	} else if path == "/gfxCardStatus/appcast.xml" {
 		http.Redirect(loggingWriter, req, scheme+"://gfx.io/appcast.xml", http.StatusMovedPermanently)
 	} else if strings.HasPrefix(path, "/gfxCardStatus") {
 		http.Redirect(loggingWriter, req, scheme+"://gfx.io", http.StatusMovedPermanently)
