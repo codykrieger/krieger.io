@@ -1,63 +1,79 @@
 package main
 
 import (
-  "fmt"
-  "log"
-  "net/http"
-  "os"
-  "path"
-
-  "github.com/gocraft/web"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"path"
+	"strings"
+	"time"
 )
 
-type context struct {}
-type gfxContext struct {
-  *context
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	status int
 }
+
+func (w *loggingResponseWriter) WriteHeader(status int) {
+	w.status = status
+	w.ResponseWriter.WriteHeader(status)
+}
+
+var staticMux = http.NewServeMux()
 
 func main() {
-  workingDirectory, _ := os.Getwd()
+	workingDirectory, _ := os.Getwd()
 
-  log.Printf("Working directory: %s", workingDirectory)
+	log.Printf("Working directory: %s", workingDirectory)
 
-  router := web.New(context{}).
-    Middleware(web.LoggerMiddleware).
-    Middleware(web.StaticMiddleware(path.Join(workingDirectory, "_site"))).
-    Get("/downloads/:file:gfxCardStatus-(.+)", gfxDownloadsHandler)
+	staticMux.Handle("/", http.FileServer(http.Dir(path.Join(workingDirectory, "_site"))))
+	http.HandleFunc("/", rootHandler)
 
-  gfxRouter := router.Subrouter(gfxContext{}, "/gfxCardStatus")
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "3000"
+	}
 
-  // gocraft/web doesn't support NotFound handlers on anything but the root
-  // router...and it also doesn't support optional path segments...so we have
-  // to do some really dumb shit here to make nested paths redirect to gfx.io.
-  gfxRouter.Get("/appcast.xml", gfxAppcastHandler).
-    Get("/:whatever", gfxHandler).
-    Get("/:whatever/:whateveragain", gfxHandler).
-    Get("/:whatever/:whateveragain/:whateverathirdtime", gfxHandler)
+	log.Printf("Listening on http://0.0.0.0:%s...", port)
 
-  port := os.Getenv("PORT")
-  if len(port) == 0 {
-    port = "3000"
-  }
-
-  log.Printf("Listening on http://0.0.0.0:%s...", port)
-
-  log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-func gfxDownloadsHandler(w web.ResponseWriter, req *web.Request) {
-  scheme := req.URL.Scheme
-  file := req.PathParams["file"]
-  http.Redirect(w, req.Request, scheme+"://gfx.io/downloads/"+file, http.StatusMovedPermanently)
-}
+func rootHandler(w http.ResponseWriter, req *http.Request) {
+	startTime := time.Now()
 
-func gfxAppcastHandler(w web.ResponseWriter, req *web.Request) {
-  scheme := req.URL.Scheme
-  http.Redirect(w, req.Request, scheme+"://gfx.io/appcast.xml", http.StatusMovedPermanently)
-}
+	path := req.URL.Path
+	scheme := req.Header.Get("X-Forwarded-Proto")
+	if len(scheme) == 0 {
+		scheme = "http"
+	}
 
-func gfxHandler(w web.ResponseWriter, req *web.Request) {
-  // scheme := req.Request.URL.Scheme
-  fmt.Fprintf(w, "yup: %s", req.Request.URL.String())
-  // http.Redirect(w, req.Request, scheme+"://gfx.io", http.StatusMovedPermanently)
+	loggingWriter := &loggingResponseWriter{w, 0}
+
+	if path == "/gfxCardStatus/appcast.xml" {
+		http.Redirect(loggingWriter, req, scheme+"://gfx.io/appcast.xml", http.StatusMovedPermanently)
+	} else if strings.HasPrefix(path, "/gfxCardStatus") {
+		http.Redirect(loggingWriter, req, scheme+"://gfx.io", http.StatusMovedPermanently)
+	} else if strings.HasPrefix(path, "/downloads/gfxCardStatus-") {
+		http.Redirect(loggingWriter, req, scheme+"://gfx.io"+path, http.StatusMovedPermanently)
+	} else {
+		staticMux.ServeHTTP(loggingWriter, req)
+	}
+
+	duration := time.Since(startTime).Nanoseconds()
+
+	var units string
+	switch {
+	case duration > 2000000:
+		units = "ms"
+		duration /= 1000000
+	case duration > 1000:
+		units = "μs"
+		duration /= 1000
+	default:
+		units = "ns"
+	}
+
+	fmt.Printf("[%d %s] %d '%s'\n", duration, units, loggingWriter.status, path)
 }
