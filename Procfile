@@ -1,1 +1,1 @@
-web: goserver
+web: krieger.io
