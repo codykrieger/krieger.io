@@ -55,6 +55,8 @@ func rootHandler(w http.ResponseWriter, req *http.Request) {
 	if strings.HasPrefix(host, "www.") {
 		nakedHost := strings.TrimPrefix(host, "www.")
 		http.Redirect(loggingWriter, req, scheme+"://"+nakedHost+path, http.StatusMovedPermanently)
+	} else if host == "codykrieger.com" {
+		http.Redirect(loggingWriter, req, scheme+"://krieger.io"+path, http.StatusMovedPermanently)
 	} else if path == "/gfxCardStatus/appcast.xml" {
 		http.Redirect(loggingWriter, req, scheme+"://gfx.io/appcast.xml", http.StatusMovedPermanently)
 	} else if strings.HasPrefix(path, "/gfxCardStatus") {
