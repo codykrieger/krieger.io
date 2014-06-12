@@ -8,7 +8,7 @@ There are a couple of interesting things at play here:
 - The Jekyll source; pretty standard, aside from a couple of custom plugins
 - The source for a tiny server written in Go, which actually handles all of the
   requests to the Heroku dyno(s) (`main.go`)
-- The assumption that the Heroku buildpack being used is https://github.com/ddollar/heroku-buildpack-multi
+- The assumption that the Heroku buildpack being used is https://github.com/codykrieger/heroku-buildpack-multi
   (which then invokes the buildpacks in `.buildpacks`)
   - Buildpack number one is https://github.com/codykrieger/heroku-buildpack-jekyll,
     which builds the Jekyll site after being pushed to Heroku
@@ -24,9 +24,9 @@ the Jekyll site or Go server necessary. Everything's done on-demand.
 % git clone https://github.com/codykrieger/krieger.io.git
 % cd krieger.io
 
-% heroku create -b https://github.com/ddollar/heroku-buildpack-multi.git
+% heroku create -b https://github.com/codykrieger/heroku-buildpack-multi.git
 Creating damp-waters-7941... done, stack is cedar
-BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+BUILDPACK_URL=https://github.com/codykrieger/heroku-buildpack-multi.git
 http://damp-waters-7941.herokuapp.com/ | git@heroku.com:damp-waters-7941.git
 Git remote heroku added
 
