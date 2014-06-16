@@ -9,11 +9,6 @@ gem 'sass'
 
 gem 'stringex'
 
-gem 'puma'
-
-gem 'rack-rewrite'
-gem 'rack-contrib'
-
 group :development do
   gem 'foreman'
 end
