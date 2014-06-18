@@ -174,10 +174,10 @@ blockquote {
       a {
         color: #8085C1;
       }
+    }
 
-      span.label {
-        color: #aaa;
-      }
+    span.label {
+      color: #aaa;
     }
 
     .rss {
@@ -214,6 +214,10 @@ article {
 /* Common classes
 /*
 /*****************************************************************************/
+
+.clear {
+  clear: both;
+}
 
 span, p {
   &.meta {
