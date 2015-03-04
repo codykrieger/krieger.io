@@ -1,7 +1,7 @@
 name: cody krieger
 
 markdown: redcarpet
-highlighter: true
+highlighter: pygments
 
 exclude: ['Gemfile', 'Gemfile.lock', 'README.md', 'Procfile', 'Rakefile', 'config.ru', 'vendor', 'bin']
 
