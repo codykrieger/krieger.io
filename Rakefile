@@ -3,7 +3,7 @@ require 'stringex'
 
 desc "Generate the site, and regenerate it if anything changes."
 task :watch do
-  exec "bundle exec jekyll serve -w --drafts"
+  exec "bundle exec jekyll serve -w --drafts --host localhost"
 end
 
 posts_dir       = "_posts"
