@@ -8,11 +8,27 @@ layout: default
 
 {% if paginator.total_posts > 0 %}
 <ul class="posts">
-  {% for post in site.posts %}
+  {% for post in paginator.posts %}
     <li>
       <a href="{{ post.url }}">{{ post.title }}</a>
       <span class="meta">{{ post.date | date_to_long_string }}</span>
     </li>
   {% endfor %}
 </ul>
+{% endif %}
+
+{% if paginator.total_pages > 1 %}
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path }}" class="next">&larr; older posts</a>
+  {% endif %}
+
+  {% if paginator.previous_page %}
+    {% if paginator.previous_page == 1 %}
+      <a href="/" class="previous">newer posts &rarr;</a>
+    {% else %}
+      <a href="{{ paginator.previous_page_path }}" class="previous">newer posts &rarr;</a>
+    {% endif %}
+  {% endif %}
+</div>
 {% endif %}

@@ -7,4 +7,5 @@ exclude: ['Gemfile', 'Gemfile.lock', 'README.md', 'Procfile', 'Rakefile', 'confi
 
 permalink: '/:title/'
 
-paginate: 5
+paginate: 7
+paginate_path: '/page/:num/'
