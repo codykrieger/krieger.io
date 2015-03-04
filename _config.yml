@@ -3,7 +3,11 @@ exclude: ['Gemfile', 'Gemfile.lock', 'README.md', 'Procfile', 'Rakefile', 'confi
 gems:
   - jemoji
 
-name: cody krieger
+name: 'cody krieger'
+description: 'writings on software, technology, and most anything else'
+url: https://krieger.io
+
+excerpt_separator: "<!--more-->"
 
 highlighter: pygments
 
