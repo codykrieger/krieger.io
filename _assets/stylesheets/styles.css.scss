@@ -64,7 +64,7 @@ a {
   &:hover   { color: #000; }
 }
 
-p { margin: 1em 0; }
+p, ul { margin: 1em 0; }
 
 pre, code {
   border: 1px solid #ddd;
@@ -229,8 +229,6 @@ span, p {
 }
 
 ul.posts {
-  margin-top: 2em;
-  margin-bottom: 2em;
   padding-top: 2em;
   border-top: 4px solid #eee;
   list-style-type: none;
@@ -259,8 +257,6 @@ div.pagination {
     padding-right: 1em;
 
     header {
-      text-align: center;
-
       h1.title {
         margin-bottom: 1em;
       }
@@ -287,14 +283,6 @@ div.pagination {
           margin-bottom: 0;
         }
       }
-    }
-  }
-
-  h2.article-or-page-title {
-    text-align: center;
-
-    & + .meta {
-      text-align: center;
     }
   }
 }
