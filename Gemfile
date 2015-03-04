@@ -9,6 +9,8 @@ gem 'sass'
 
 gem 'stringex'
 
+gem 'jemoji'
+
 group :development do
   gem 'foreman'
 end

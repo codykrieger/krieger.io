@@ -135,5 +135,6 @@ DEPENDENCIES
   foreman
   github-pages
   jekyll-asset-pipeline
+  jemoji
   sass
   stringex
