@@ -20,7 +20,7 @@ $header-font-size: 120%;
 
 // METRICS
 
-$page-width: 34em;
+$page-width: 35em;
 
 /*****************************************************************************/
 /*
@@ -145,6 +145,10 @@ blockquote {
   section.content-body {
     & > p:first-child {
       margin-top: 0;
+    }
+
+    p.intro {
+      text-align: justify;
     }
   }
 
