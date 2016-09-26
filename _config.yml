@@ -9,8 +9,6 @@ url: https://krieger.io
 
 excerpt_separator: "<!--more-->"
 
-highlighter: pygments
-
 permalink: '/:title/'
 paginate: 7
 paginate_path: '/page/:num/'
