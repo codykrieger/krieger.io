@@ -1,7 +1,8 @@
 exclude: ['Gemfile', 'Gemfile.lock', 'README.md', 'Procfile', 'Rakefile', 'config.ru', 'vendor', 'bin']
 
-gems:
+plugins:
   - jemoji
+  - jekyll-paginate
 
 name: 'cody krieger'
 description: 'writings on software, technology, and most anything else'
