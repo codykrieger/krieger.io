@@ -1,3 +1,4 @@
 baseURL = "https://krieger.io"
 languageCode = "en-us"
 title = "cody krieger"
+theme = "default"
