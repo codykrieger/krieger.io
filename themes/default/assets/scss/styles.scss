@@ -11,9 +11,10 @@ $color-primary-dark: scale-color($color-primary, $lightness: -30%); // darken($c
 
 $color-text: #444;
 $color-text-heading: #222;
-$color-text-subtle: #999;
+$color-text-subtle: #aaa;
 $color-link: $color-primary;
-$color-link-visited: $color-primary-dark;
+$color-link-visited: $color-link;
+$color-link-subtle: rgb(128, 133, 193);
 
 :root {
     // text size
@@ -43,7 +44,7 @@ $color-link-visited: $color-primary-dark;
     --space-xxxl: 8.5em;
 }
 
-html, body, header, footer, main, article, address, div, p, ul, ol, li, h1, h2, h3, h4, h5, h6, hr {
+html, body, header, footer, main, article, address, aside, div, p, ul, ol, li, h1, h2, h3, h4, h5, h6, hr {
     margin: 0;
     padding: 0;
 }
@@ -69,17 +70,20 @@ h1 {
 }
 
 hr {
-    border: 2px solid #eee;
+    border: 1px solid scale-color($color-link-subtle, $alpha: -75%); //scale-color($color-primary, $alpha: -80%);
 }
 
 pre, code {
     font-family: $font-monospace;
 }
 
+code {
+    font-size: 92%;
+}
+
 pre {
-    margin-left: var(--space-lg);
-    margin-right: var(--space-lg);
-    font-size: 80%;
+    margin-left: var(--space-md);
+    margin-right: var(--space-md);
     overflow: scroll;
 }
 
@@ -134,9 +138,9 @@ article {
     h2, h3, h4 {
         margin-top: var(--space-sm);
     }
-    // ul, ol, p {
-    //     margin: var(--space-md) 0;
-    // }
+    p {
+        text-align: justify;
+    }
     ul, ol {
         list-style-position: outside;
         padding-left: 24px;
@@ -150,18 +154,24 @@ article {
     ul li, ol li {
         line-height: var(--body-line-height);
     }
+    img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+    }
 }
 
 // color
+
 a {
     color: $color-link;
     text-decoration: none;
     &:hover {
         text-decoration: underline;
     }
-    // &:visited {
-    //     color: $color-link-visited;
-    // }
+    &:visited {
+        color: $color-link-visited;
+    }
 }
 
 // utility classes
@@ -170,7 +180,7 @@ a {
     color: $color-text-subtle;
 
     a {
-        color: scale-color($color-link, $saturation: -40%);
+        color: $color-link-subtle;
     }
 }
 
@@ -199,12 +209,16 @@ a {
     float: right;
 }
 
+.align-right {
+    text-align: right;
+}
+
 // custom
 
 .container {
     margin: 0 auto;
     padding: 0 25px;
-    max-width: 800px;
+    max-width: 700px;
 }
 
 header.top {

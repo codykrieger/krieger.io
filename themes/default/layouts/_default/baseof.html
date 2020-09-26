@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="canonical" href="{{ .Permalink }}">
 
-    {{ $title := print .Site.Title " | " .Title -}}
+    {{ $title := print .Title " | " .Site.Title -}}
     {{ if .IsHome }}{{ $title = .Site.Title }}{{ end -}}
     <title>{{ $title }}</title>
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}{{ end }}">
 
     {{ $cssOptions := (dict "targetPath" "css/styles.css" "outputStyle" "compressed") -}}
     {{ $styles := resources.Get "scss/styles.scss" | toCSS $cssOptions | fingerprint -}}
-    <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}">
+    <link rel="stylesheet" type="text/css" href="{{ $styles.Permalink | relURL }}" integrity="{{ $styles.Data.Integrity }}">
 
     {{- if not (in (string .Site.BaseURL) "localhost") }}
-    <!-- analytics snippet -->
+    <!-- fathom -->
+    <script src="https://rhinoceros.krieger.io/script.js" site="VXRCGSRU" defer></script>
     {{ end }}
 </head>
 <body>
@@ -28,16 +29,15 @@
         </main>
         <footer class="bottom deemphasized prose top-border-4px">
             <hr />
-            <address class="float-left">
-                cody krieger,
-                <span class="label">software architect</span><br />
-                <span class="label">email:</span> cody <strong>at</strong> krieger <strong>dot</strong> io<br />
-                <span class="label">pgp key:</span> <a href="/pgp-key.txt" title="2C41 BDAB 1CCA 6C19 E9AA EA2B 7BB7 8ABD D378 65E5">D37865E5</a>
-            </address>
-            <address class="float-right">
-                <a href="https://github.com/codykrieger">github.com/codykrieger</a><br />
-                <a href="https://twitter.com/codykrieger">twitter.com/codykrieger</a>
-            </address>
+            <aside class="float-left">
+                cody krieger,<br />
+                <span class="label">software architect</span>
+            </aside>
+            <nav class="float-right align-right">
+                {{- range where .Site.RegularPages "Type" "==" "pages" }}
+                <a href="{{ .Permalink | relURL }}">{{ .Title }}</a><br />
+                {{- end }}
+            </nav>
             <div class="clear"></div>
         </footer>
     </div>
