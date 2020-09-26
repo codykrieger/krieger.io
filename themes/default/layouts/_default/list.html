@@ -1,0 +1,7 @@
+{{ define "main" }}
+<ul>
+{{ range .Pages.ByPublishDate.Reverse }}
+    <li>{{ .Title }}</li>
+{{ end }}
+</ul>
+{{ end }}

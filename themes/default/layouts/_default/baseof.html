@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html>
-    {{- partial "head.html" . -}}
-    <body>
-        {{- partial "header.html" . -}}
-        <div id="content">
-        {{- block "main" . }}{{- end }}
-        </div>
-        {{- partial "footer.html" . -}}
-    </body>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="{{ .Permalink }}">
+
+    {{ $title := print .Site.Title " | " .Title -}}
+    {{ if .IsHome }}{{ $title = .Site.Title }}{{ end -}}
+    <title>{{ $title }}</title>
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}{{ end }}">
+
+    {{ $cssOptions := (dict "targetPath" "css/styles.css" "outputStyle" "compressed") -}}
+    {{ $styles := resources.Get "scss/styles.scss" | toCSS $cssOptions | fingerprint -}}
+    <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}">
+
+    {{- if not (in (string .Site.BaseURL) "localhost") }}
+    <!-- analytics snippet -->
+    {{ end }}
+</head>
+<body>
+    <div class="container">
+        <header class="top">
+            <a class="text--lg" href="/"><strong>cody krieger</strong></a>
+        </header>
+        <main>
+            {{ block "main" . }}{{- end }}
+        </main>
+        <footer class="bottom deemphasized prose top-border-4px">
+            <hr />
+            <address class="float-left">
+                cody krieger,
+                <span class="label">software architect</span><br />
+                <span class="label">email:</span> cody <strong>at</strong> krieger <strong>dot</strong> io<br />
+                <span class="label">pgp key:</span> <a href="/pgp-key.txt" title="2C41 BDAB 1CCA 6C19 E9AA EA2B 7BB7 8ABD D378 65E5">D37865E5</a>
+            </address>
+            <address class="float-right">
+                <a href="https://github.com/codykrieger">github.com/codykrieger</a><br />
+                <a href="https://twitter.com/codykrieger">twitter.com/codykrieger</a>
+            </address>
+            <div class="clear"></div>
+        </footer>
+    </div>
+</body>
 </html>

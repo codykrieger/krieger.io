@@ -1,0 +1,216 @@
+// typefaces
+$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+$font-secondary: "Hoefler Text", Georgia, serif;
+$font-monospace: Monaco, Consolas, "Lucida Console", monospace;
+
+// color
+$color-primary: #c22a09;
+// --color-primary-light: color-mod(var(--color-primary) tint(15%));
+$color-primary-dark: scale-color($color-primary, $lightness: -30%); // darken($color-primary, 5%);
+// --color-primary-bg: color-mod(var(--color-primary) alpha(20%));
+
+$color-text: #444;
+$color-text-heading: #222;
+$color-text-subtle: #999;
+$color-link: $color-primary;
+$color-link-visited: $color-primary-dark;
+
+:root {
+    // text size
+    --text-base-size: 1em;
+    --text-scale-ratio: 1.2;
+    --text-xs: calc(1em / (var(--text-scale-ratio) * var(--text-scale-ratio)));
+    --text-sm: calc(1em / var(--text-scale-ratio));
+    --text-md: calc(1em * var(--text-scale-ratio));
+    --text-lg: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xl: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xxl: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xxxl: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+
+    // line height
+    --heading-line-height: 1.2;
+    --body-line-height: 1.4;
+
+    // spacing
+    --space-xxxs: 0.25em;
+    --space-xxs:  0.375em;
+    --space-xs:   0.5em;
+    --space-sm:   0.75em;
+    --space-md:   1.25em;
+    --space-lg:   2em;
+    --space-xl:   3.25em;
+    --space-xxl:  5.25em;
+    --space-xxxl: 8.5em;
+}
+
+html, body, header, footer, main, article, address, div, p, ul, ol, li, h1, h2, h3, h4, h5, h6, hr {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: var(--text-base-size);
+    font-family: $font-primary;
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-secondary;
+}
+
+h1, h2, h3, h4, form legend {
+    color: $color-text-heading;
+    margin-bottom: var(--space-xxs);
+    line-height: var(--heading-line-height);
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+hr {
+    border: 2px solid #eee;
+}
+
+pre, code {
+    font-family: $font-monospace;
+}
+
+pre {
+    margin-left: var(--space-lg);
+    margin-right: var(--space-lg);
+    font-size: 80%;
+    overflow: scroll;
+}
+
+ul, ol, p, hr {
+    margin: var(--space-md) 0;
+}
+
+b, strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+u {
+    text-decoration: underline;
+}
+
+address {
+    font-style: normal;
+}
+
+// text size
+.text--xxxl {
+    font-size: var(--text-xxxl);
+}
+h1, .text--xxl {
+    font-size: var(--text-xxl);
+}
+h2, .text--xl {
+    font-size: var(--text-xl);
+}
+h3, .text--lg {
+    font-size: var(--text-lg);
+}
+h4, .text--md {
+    font-size: var(--text-md);
+}
+.text--sm, small {
+    font-size: var(--text-sm);
+}
+.text--xs {
+    font-size: var(--text-xs);
+}
+p, .prose {
+    line-height: var(--body-line-height);
+}
+
+// spacing
+article {
+    h2, h3, h4 {
+        margin-top: var(--space-sm);
+    }
+    // ul, ol, p {
+    //     margin: var(--space-md) 0;
+    // }
+    ul, ol {
+        list-style-position: outside;
+        padding-left: 24px;
+    }
+    ul {
+        list-style-type: disc;
+    }
+    ol {
+        list-style-type: decimal;
+    }
+    ul li, ol li {
+        line-height: var(--body-line-height);
+    }
+}
+
+// color
+a {
+    color: $color-link;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+    // &:visited {
+    //     color: $color-link-visited;
+    // }
+}
+
+// utility classes
+
+.deemphasized {
+    color: $color-text-subtle;
+
+    a {
+        color: scale-color($color-link, $saturation: -40%);
+    }
+}
+
+.label {
+    color: darken($color-text-subtle, 20%);
+}
+
+.no-bullets {
+    list-style-type: none;
+    padding-left: 0;
+
+    li + li {
+        margin-top: var(--space-xs);
+    }
+}
+
+.clear {
+    clear: both;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+// custom
+
+.container {
+    margin: 0 auto;
+    padding: 0 25px;
+    max-width: 800px;
+}
+
+header.top {
+    margin: var(--space-lg) 0;
+}
+
+footer.bottom {
+    margin-bottom: var(--space-lg);
+}

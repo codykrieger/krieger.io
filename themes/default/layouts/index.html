@@ -1,0 +1,16 @@
+{{ define "main" }}
+{{ .Content }}
+
+<hr />
+
+<ul class="no-bullets">
+{{- range where .Site.RegularPages.ByPublishDate.Reverse "Type" "==" "posts" }}
+    <li>
+        <a href="{{ .Permalink | relURL }}">{{ .Title }}</a>
+        {{- if .Draft }} <small class="deemphasized">[draft]</small>{{ end -}}
+        <br />
+        <time class="deemphasized">{{ .PublishDate.Format "2 Jan 2006" }}</time>
+    </li>
+{{- end -}}
+</ul>
+{{ end }}
