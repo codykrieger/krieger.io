@@ -4,6 +4,7 @@ title = "cody krieger"
 theme = "default"
 
 [permalinks]
+  pages = "/:filename/"
   posts = "/:filename/"
 
 [markup]
