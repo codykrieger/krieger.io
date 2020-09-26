@@ -2,3 +2,20 @@ baseURL = "https://krieger.io"
 languageCode = "en-us"
 title = "cody krieger"
 theme = "default"
+
+[permalinks]
+  posts = "/:filename/"
+
+[markup]
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineAnchors = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "github"
+    tabWidth = 4
