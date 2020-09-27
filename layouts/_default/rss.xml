@@ -35,6 +35,8 @@
                 <guid>{{ .Permalink }}</guid>
                 {{ if .Description -}}
                 <description>{{- `<![CDATA[` | safeHTML }}{{ .Description | safeHTML }}{{ `]]>` | safeHTML -}}</description>
+                {{ else if .Summary -}}
+                <description>{{- `<![CDATA[` | safeHTML }}{{ .Summary | safeHTML }}{{ `]]>` | safeHTML -}}</description>
                 {{ end -}}
                 <content:encoded>{{- `<![CDATA[` | safeHTML }}{{ .Content | safeHTML }}{{ `]]>` | safeHTML -}}</content:encoded>
             </item>
