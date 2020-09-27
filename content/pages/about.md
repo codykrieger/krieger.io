@@ -1,7 +1,7 @@
 ---
 title: "about"
 date: 2020-09-26T16:07:41-07:00
-draft: true
+draft: false
 ---
 
 Hi! 👋 I'm Cody.
