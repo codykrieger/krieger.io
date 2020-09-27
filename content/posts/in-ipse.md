@@ -1,6 +1,7 @@
 ---
 title: "In Ipse"
 date: 2020-09-26T05:52:29-07:00
+description: "Suuuup"
 draft: true
 ---
 
