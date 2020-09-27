@@ -1,6 +1,24 @@
-baseURL = "https://krieger.io"
+baseURL = "https://new.krieger.io"
 languageCode = "en-us"
 title = "cody krieger"
+copyright = "(c) 2020 cody krieger. all rights reserved."
+
+ignoreErrors = ["error-disable-taxonomy"]
+disableKinds = ["section", "taxonomy"]
+
+[author]
+  name = "cody krieger"
+
+[output]
+  home = ["HTML"]
+  page = ["HTML"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
+
+[outputFormats]
+  [outputFormats.RSS]
+    mediatype = "application/rss"
+    baseName = "/rss/index"
 
 [permalinks]
   pages = "/:filename/"
