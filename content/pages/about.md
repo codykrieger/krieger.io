@@ -10,14 +10,13 @@ I'm a software engineer by day, and a guitarist, singer, and recording engineer
 by night.
 
 In 2010, as a senior in high school, I wrote and open-sourced
-[gfxCardStatus][gfxCardStatus], which, rather by accident, became overwhelmingly
-popular. To this day, the gfxCardStatus website continues to see a large amount
-of traffic—between website visits and download traffic, on the order of 300K
-unique visitors per month.
+[gfxCardStatus][gfxCardStatus], which became surprisingly popular. To this day,
+the gfxCardStatus website continues to see a large amount of traffic—between
+website visits and download traffic, on the order of 300K unique visitors per
+month.
 
 I went on to attend [RIT][rit] for software engineering. After two years and two
-summer internships with Apple, I dropped out to join Apple's Safari team, where
-I regularly learned more in days than I learned in months in academia.
+summer internships with Apple, I left to join Apple's Safari team.
 
 [I left Apple][adieu] in 2015 to join a startup called EVA Automation, which
 later acquired the storied British hi-fi brand Bowers & Wilkins. While at
