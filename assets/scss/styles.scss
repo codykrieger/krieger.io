@@ -9,8 +9,8 @@ $color-primary: #c22a09;
 $color-primary-dark: scale-color($color-primary, $lightness: -30%); // darken($color-primary, 5%);
 // --color-primary-bg: color-mod(var(--color-primary) alpha(20%));
 
-$color-text: #444;
-$color-text-heading: #222;
+$color-text: #333;
+$color-text-heading: #111;
 $color-text-subtle: #aaa;
 $color-link: $color-primary;
 $color-link-visited: $color-link;
@@ -52,7 +52,7 @@ html, body, header, footer, main, article, address, aside, div, p, ul, ol, li, h
 body {
     font-size: var(--text-base-size);
     font-family: $font-primary;
-    color: var(--color-text);
+    color: $color-text;
 }
 
 h1, h2, h3, h4, h5, h6 {
