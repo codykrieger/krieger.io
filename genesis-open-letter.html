@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Thoughts on GeneSIS</title>
+<style>
+*{margin:0;padding:0;}
+body {
+	font:13.34px helvetica,arial,freesans,clean,sans-serif;
+	color:black;
+	line-height:1.4em;
+	background-color: #F8F8F8;
+	padding: 0.7em;
+}
+p {
+	margin:1em 0;
+	line-height:1.5em;
+}
+table {
+	font-size:inherit;
+	font:100%;
+	margin:1em;
+}
+table th{border-bottom:1px solid #bbb;padding:.2em 1em;}
+table td{border-bottom:1px solid #ddd;padding:.2em 1em;}
+input[type=text],input[type=password],input[type=image],textarea{font:99% helvetica,arial,freesans,sans-serif;}
+select,option{padding:0 .25em;}
+optgroup{margin-top:.5em;}
+pre,code{font:12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;}
+pre {
+	margin:1em 0;
+	font-size:12px;
+	background-color:#eee;
+	border:1px solid #ddd;
+	padding:5px;
+	line-height:1.5em;
+	color:#444;
+	overflow:auto;
+	-webkit-box-shadow:rgba(0,0,0,0.07) 0 1px 2px inset;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;border-radius:3px;
+}
+pre code {
+	padding:0;
+	font-size:12px;
+	background-color:#eee;
+	border:none;
+}
+code {
+	font-size:12px;
+	background-color:#f8f8ff;
+	color:#444;
+	padding:0 .2em;
+	border:1px solid #dedede;
+}
+img{border:0;max-width:100%;}
+abbr{border-bottom:none;}
+a{color:#4183c4;text-decoration:none;}
+a:hover{text-decoration:underline;}
+a code,a:link code,a:visited code{color:#4183c4;}
+h2,h3{margin:1em 0;}
+h1,h2,h3,h4,h5,h6{border:0;}
+h1{font-size:170%;border-top:4px solid #aaa;padding-top:.5em;margin-top:1.5em;}
+h1:first-child{margin-top:0;padding-top:.25em;border-top:none;}
+h2{font-size:150%;margin-top:1.5em;border-top:4px solid #e0e0e0;padding-top:.5em;}
+h3{margin-top:1em;}
+hr{border:1px solid #ddd;}
+ul{margin:1em 0 1em 2em;}
+ol{margin:1em 0 1em 2em;}
+ul li,ol li{margin-top:.5em;margin-bottom:.5em;}
+ul ul,ul ol,ol ol,ol ul{margin-top:0;margin-bottom:0;}
+blockquote{margin:1em 0;border-left:5px solid #ddd;padding-left:.6em;color:#555;}
+dt{font-weight:bold;margin-left:1em;}
+dd{margin-left:2em;margin-bottom:1em;}
+@media screen and (min-width: 768px) {
+    body {
+        width: 748px;
+        margin:10px auto;
+    }
+}
+</style>
+
+<!-- fathom -->
+<script src="https://rhinoceros.krieger.io/script.js" site="VXRCGSRU" defer></script>
+</head>
+<body>
+
+<h1>Thoughts on GeneSIS</h1>
+
+<h2>Introduction.</h2>
+
+<p>Hi,</p>
+
+<p>My name is Cody Krieger. I&rsquo;m an undergraduate student studying Software Engineering here at RIT, and I have some serious concerns about the new RIT Enrollment system, also known as GeneSIS.</p>
+
+<p>After taking a good look at the <a target="_blank" href="https://mycampustest.rit.edu/psc/sasrch/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL">new search functionality</a>, and browsing through the <a target="_blank" href="http://www.rit.edu/enrollment">Enrollment &ldquo;marketing&rdquo; site</a>, it is clear that GeneSIS is headed in the wrong direction at high velocity.</p>
+
+<h2>Enrollment appointments.</h2>
+
+<p>I think we can all agree that the <a target="_blank" href="http://sis.rit.edu">current SIS</a> does not meet the needs of the students and the faculty. It has failed to provide a consistent, pleasant experience during registration for as long as anyone can remember. But instituting an artificial capacity cap on the new Enrollment system is most definitely not the right answer - the capacity issues that SIS currently experiences are the result of poor engineering and age, not an extreme number of students overloading the system. The new system could easily be load balanced by throwing an <a target="_blank" href="https://www.nginx.com">NGINX</a> or <a target="_blank" href="http://haproxy.1wt.eu/">HAProxy</a> instance in front of the application servers. Companies like One Kings Lane (and many, many others) handle <em>millions</em> of customers concurrently, with very few servers on hand. It is not unreasonable to suggest that this system should be able to support a measly couple thousand concurrent students.</p>
+
+<p>Keeping all of that in mind, the 150 student &ldquo;<a target="_blank" href="http://www.rit.edu/enrollment/#whats-new">enrollment appointments</a>&rdquo; are completely unfair to students. Instead of being a race to register for the most popular/required courses, if you&rsquo;re one of the unlucky ones to get stuck in the last group of 150 students to be let in, you might not be able to register for any of your desired courses. Who gets to choose which group of 150 a particular student fits into? Even if it&rsquo;s random, it&rsquo;s still extremely unfair, because your course registration fate is not in your own hands. You&rsquo;re at the mercy of the system.</p>
+
+<h2>User interface and usability.</h2>
+
+<p>There are also many, many problems with the UI of the search functionality. If the rest of the new Enrollment system is anything like the search UI, then there is no doubt in my mind that we&rsquo;re absolutely headed in the wrong direction. I&rsquo;ve compiled a list of specific grievances below.</p>
+
+<ul>
+<li><p>The UI for the search tool is really convoluted. There are far too many fields, some of which have really non-obvious names.</p></li>
+<li><p>The default text field when you visit the search page is titled &ldquo;Course Attribute.&rdquo; That&rsquo;s not immediately understandable, and is detrimental to the overall quality of the user experience. Google has one big search box for a reason: usability. It&rsquo;s unbelievably simple to search Google, and 99% of the time, their advanced search functionality is completely unnecessary. The same thing applies here.</p></li>
+<li><p>Clicking the &ldquo;select subject&rdquo; button takes you to a separate page. This can easily be handled using modern AJAXy techniques, but like much of the rest of the search form, it&rsquo;s unnecessary. More on that below.</p></li>
+<li><p>The error messages that appear in modal dialog boxes are really user-unfriendly. Example: &ldquo;Invalid value &ndash; press the prompt button or hyperlink for a list of valid values (15,11). The value entered in the field does not match one of the allowable values. You can see the allowable values by pressing the Prompt button or hyperlink.&rdquo; First of all, where are the prompt buttons/hyperlinks it mentions? Since this shows up in a modal dialog, there is little context as to what field this error is associated with - error messages do not belong in modal dialogs. Second, nobody wants to read error messages like that. They should be simple, concise, easily understandable, and provided in context. The quoted error message meets exactly zero of the aforementioned goals.</p></li>
+<li><p>A default font size of 10 pixels is an unwise choice. It&rsquo;s far too small, and is potentially hard on the eyes. It shouldn&rsquo;t be necessary to increase the font size or zoom level in your browser in order to read text in the Enrollment application or its associated search functionality. This may be a symptom of having too much information on every page, and is a major reason to overhaul the UI entirely. This project desperately needs a UI designer who is well-versed in modern typography and web standards.</p></li>
+<li><p>There are 43 HTML tables present on the search page. There&rsquo;s also no DOCTYPE. These are key indicators that the code was written in such a way that it will be very difficult to maintain, should customizations need to be made. This also makes it clear that there was a distinct lack of standards compliance involved in engineering the PeopleSoft-based GeneSIS.</p></li>
+</ul>
+
+
+<h2>The ideal solution.</h2>
+
+<p>By default, what you should see when attempting to search for a course is a single search box. It should have intelligent autocomplete functionality, so that every other field in the search form is unnecessary.</p>
+
+<p>It is not only possible, but fairly simple, to implement search functionality with intelligent autocomplete with an indexing tool called elasticsearch. <a target="_blank" href="https://stripe.com/blog/better-faster-dashboard">Here&rsquo;s a wonderful example of what it could look like</a>. Autocompleted course search has even been done before with <a target="_blank" href="http://www.rit.edu/gccis/intersect/?20103/courses/browse/">RIT Intersect</a>, and is a great step in the right direction. What we need is a pleasant, Google-like experience for course search, not a frustrating experience with an extremely counterintuitive form.</p>
+
+<p>Given the opportunity to do GeneSIS right, it would be a major step forward for RIT, and would be the guiding beacon for the semester conversion. This, a far cry from the current implementation of GeneSIS, is what RIT, its students, and its faculty need.</p>
+
+<h2>The bottom line.</h2>
+
+<p>Among the <a target="_blank" href="http://www.rit.edu/genesis/vision-and-guiding-principles">GeneSIS guiding principles</a> is &ldquo;Strive for little to no customizations. We will reengineer our processes to take advantage of the built-in &lsquo;best practices.&rsquo;&rdquo; That&rsquo;s an admirable goal, but there seems to be a distinct lack of &ldquo;best practices&rdquo; inherent in the PeopleSoft-based solution that is GeneSIS. One of the guiding principles also states, &ldquo;Processes will be designed around student success, transformation, and institutional effectiveness…&rdquo; This is patently false. The PeopleSoft UI is the perfect counterexample of the effectiveness and success that GeneSIS promises to provide.</p>
+
+<p>RIT desperately needs a new system to replace SIS. However, the GeneSIS project is an unacceptable replacement, and represents several large steps in the wrong direction. It is extremely frustrating to see that <em>so many millions of dollars</em> (of students' tuition money, no less) were spent on an &ldquo;enterprise&rdquo; system that is not getting the job done, and will continue to be a major source of frustration for students and faculty alike for years to come.</p>
+
+<p>Even more disappointing is the fact that the Software Engineering, Computer Science, and Information Technology majors weren&rsquo;t approached with the possibility of creating and maintaining this new system. Many students, myself included, are more than willing to work with RIT to create and maintain the solution that best fits our needs, and provides a consistent and pleasant user experience to boot. <strong>The innovative potential inherent in RIT&rsquo;s student population can and should be used for the good of the university.</strong></p>
+
+<p>On behalf of the RIT student population, I urge you to seriously reconsider the deployment of this new system. To these ends, I would be more than happy to discuss these points in greater detail with anyone who is willing to listen. I think I speak for all of us at RIT when I say that we have nothing but the university&rsquo;s best interests in mind. Please don&rsquo;t hesitate to contact me with any questions or concerns.</p>
+
+<p>
+  Regards,<br />
+  Cody Krieger<br />
+  April 5, 2012
+</p>
+
+<h2>Share.</h2>
+
+<p>
+  Did this letter resonate with you? Perhaps you'd like to share it with your
+  friends or <a href="/cdn-cgi/l/email-protection#c2b0abb6a7acb0adaeaeafa7acb682b0abb6eca7a6b7fd91b7a0a8a7a1b6ff81adaca1a7b0acb1e7f0f2a3a0adb7b6e7f0f287acb0adaeaeafa7acb6ece4a0ada6bbffaab6b6b2f8ededa9b0aba7a5a7b0ecabadeda5a7aca7b1abb1efadb2a7acefaea7b6b6a7b0ecaab6afae">email RIT with your thoughts</a>.
+</p>
+
+<div>
+  <a name="fb_share"></a> 
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript">
+        </script>
+
+        <br /><br />
+
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="codykrieger">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+</body>
+</html>
