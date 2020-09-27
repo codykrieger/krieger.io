@@ -6,14 +6,16 @@ draft: false
 
 Want to get in touch?
 
-Email:
+#### email
+
 <address>
     <span class="label">address:</span> cody <strong>at</strong> krieger <strong>dot</strong> io<br />
     <span class="label">pgp key:</span> <a href="/pgp-key.txt" title="2C41 BDAB 1CCA 6C19 E9AA EA2B 7BB7 8ABD D378 65E5">D37865E5</a>
     (<a href="https://keybase.io/cjk">keybase</a>)
 </address>
 
-Social media:
+#### social media/etc.
+
 <address>
     <span class="label">github<sup>1</sup>:</span> <a href="https://github.com/codykrieger">@codykrieger</a><br />
     <span class="label">twitter:</span> <a href="https://twitter.com/codykrieger">@codykrieger</a><br />
