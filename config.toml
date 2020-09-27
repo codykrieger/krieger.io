@@ -6,7 +6,12 @@ copyright = "(c) 2020 cody krieger. all rights reserved."
 ignoreErrors = ["error-disable-taxonomy"]
 disableKinds = ["section", "taxonomy"]
 
+[params]
+  author = "cody krieger"
+  description = "The personal website and blog of Cody Krieger."
+
 [author]
+  email = "cody@krieger.io"
   name = "cody krieger"
 
 [output]
