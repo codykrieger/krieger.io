@@ -17,6 +17,9 @@ $color-link-visited: $color-link;
 $color-link-subtle: rgb(128, 133, 193);
 
 :root {
+    // lots of this was inspired by this post:
+    // https://medium.com/codyhouse/create-your-design-system-part-1-typography-7c630d9092bd
+
     // text size
     --text-base-size: 1em;
     --text-scale-ratio: 1.2;
