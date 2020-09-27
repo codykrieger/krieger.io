@@ -1,0 +1,335 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>cody krieger</title><link>https://new.krieger.io/</link><description>The personal website and blog of Cody Krieger.</description><generator>Hugo -- https://gohugo.io</generator><language>en-us</language><copyright>(c) 2020 cody krieger. all rights reserved.</copyright><lastBuildDate>Sat, 26 Sep 2020 16:07:41 -0700</lastBuildDate><atom:link href="https://new.krieger.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>&lt;![CDATA[Creating bootable macOS Sierra installation media on macOS Catalina]]></title><link>https://new.krieger.io/creating-bootable-macos-sierra-installation-media-on-macos-catalina/</link><pubDate>Mon, 24 Aug 2020 23:34:00 -0700</pubDate><author>cody@krieger.io (cody krieger)</author><guid>https://new.krieger.io/creating-bootable-macos-sierra-installation-media-on-macos-catalina/</guid><content:encoded><![CDATA[<p>If, like a friend of mine, you find yourself needing to install a fresh copy of
+macOS Sierra on an older Mac, and you want to create a bootable USB flash drive
+to hold the installer using <code>createinstallmedia</code>, a quick bit of Googling starts
+to turn up numerous threads <a href="https://discussions.apple.com/thread/250811969">like this</a>.</p>
+<p><strong>tl;dr:</strong> In late 2019, Apple published an updated macOS Sierra installer which
+broke the ability to create bootable installation media, failing with an error
+like <code>/Volumes/XYZ is not a valid volume mount point</code>.</p>
+<p>Attempting to use Sierra&rsquo;s <code>createinstallmedia</code> on my macOS Catalina machine
+yielded a slightly different set of problems, but with a bit of
+reverse-engineering, I was able to figure out how to make it work.</p>
+<p>If you don&rsquo;t care for the nitty gritty technical analysis, you can <a href="#just-give-me-the-instructions-dammit">skip right to
+the instructions below</a>.</p>
+<h2 id="technical-deep-dive">technical deep-dive</h2>
+<p>The oft-suggested workaround, assuming you have an older Mac upon which the
+Sierra installer can be installed, involves finding and downloading an older
+copy of <code>Install macOS Sierra.app</code> from a who-knows-how-trustworthy source,
+running <code>createinstallmedia</code> from within the newer installer app bundle, and
+then renaming the older installer app bundle out from under <code>createinstallmedia</code>
+before confirming that you&rsquo;d like to erase the target disk.</p>
+<p>Gross.</p>
+<p>With those instructions, if you <em>don&rsquo;t</em> have an older Mac upon which you can
+install the Sierra installer (or if it&rsquo;s not in working order), you&rsquo;re kind of
+out of luck.</p>
+<p>I neither had an older Mac, nor was I content with downloading a
+possibly-sketchy older version of the installer from some random place on the
+internet, so I set my sights on figuring out how to prepare the installation
+medium from my Catalina machine.</p>
+<h3 id="problem-1-missing-installesddmg">problem #1: missing <code>InstallESD.dmg</code></h3>
+<p>After downloading <code>InstallOS.dmg</code> via the <em>Download macOS Sierra</em> link in step 4
+of <a href="https://support.apple.com/en-us/HT208202">this Apple support document</a>, I mounted the disk image, and
+attempted to run the installation package, only to be met with this dialog:</p>
+<p><img src="/images/Screen-Shot-2020-08-24-at-6.10.56-PM.png" alt="Error dialog: This version of macOS 10.12 cannot be installed on this computer."></p>
+<p>Oops. My machine (a 2019 Mac mini) is too new to run Sierra, so the installer
+package is preventing me from even installing <code>Install macOS Sierra.app</code>.</p>
+<p>OK, fine—we&rsquo;ll extract the contents of the installer package manually:</p>
+<pre><code>% pkgutil --expand-full /Volumes/Install\ macOS/InstallOS.pkg ~/Desktop/InstallOS
+</code></pre><p>Note that we use pkgutil&rsquo;s undocumented <code>--expand-full</code> flag here, because
+<code>--expand</code> isn&rsquo;t enough to cause <code>Install macOS Sierra.app</code> to be extracted from
+the <code>Payload</code> file within the installer package.</p>
+<p>Now let&rsquo;s copy the installer app to <code>/Applications</code>:</p>
+<pre><code>% sudo ditto ~/Desktop/InstallOS/InstallOS.pkg/Payload/Install\ macOS\ Sierra.app \
+    /Applications/Install\ macOS\ Sierra.app
+</code></pre><p>And attempt to run <code>createinstallmedia</code> (assuming we have a blank flash drive
+mounted at <code>/Volumes/Untitled</code>):</p>
+<pre><code>% sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia \
+    --volume /Volumes/Untitled \
+    --applicationpath /Applications/Install\ macOS\ Sierra.app
+</code></pre><p>Immediately, we get <code>/Applications/Install macOS Sierra.app does not appear to be a valid OS installer application</code>. Grr.</p>
+<p>Using <a href="https://www.hopperapp.com">Hopper</a> to disassemble <code>createinstallmedia</code>, I quickly narrowed
+in on the cause of the <code>does not appear to be a valid OS installer application</code>
+error message, centered around a failing validation routine called at address
+<code>0x1000017a3</code>:</p>
+<pre><code>00000001000017a0         mov        rdi, r13
+00000001000017a3         call       sub_100001cb2
+00000001000017a8         cmp        eax, 0x1
+00000001000017ab         je         loc_1000018b7
+00000001000017b1         test       eax, eax
+00000001000017b3         je         loc_10000198c
+</code></pre><p>If the validation routine at <code>sub_100001cb2</code> returns <code>1</code>, we jump to
+<code>0x1000018b7</code> and continue on. If it returns <code>0</code>, we jump to <code>0x10000198c</code>, at
+which point the <code>does not appear to be a valid OS installer application</code> message
+is printed, and the program exits. If it returns anything other than <code>0</code> or <code>1</code>,
+we don&rsquo;t jump anywhere, and execute the next instruction after <code>0x1000017b3</code>.</p>
+<p><code>sub_100001cb2</code>, as Hopper calls it, isn&rsquo;t too terribly difficult to read, but
+rather than regurgitating a wall of x86_64 assembly here, I&rsquo;ll just explain
+what it does. It:</p>
+<ul>
+<li>Accepts an <code>NSString *</code> as its only parameter, which is the path to <code>Install macOS Sierra.app</code> that the user specified for the <code>--applicationpath</code> flag to
+<code>createinstallmedia</code></li>
+<li>Validates the existence of that path, and that it&rsquo;s a directory</li>
+<li>Ensures that the bundle identifier of the application begins with
+<code>com.apple.InstallAssistant</code></li>
+<li>Looks for <code>SharedSupport/OSInstall.mpkg</code> within the app bundle, and if it
+can&rsquo;t find that, falls back to looking for <code>SharedSupport/InstallInfo.plist</code></li>
+<li>If <code>InstallInfo.plist</code> exists, it then looks up the <code>System Image Info -&gt; URL</code>
+key, and looks for a disk image named after that value, which is expected to
+contain <code>OSInstall.mpkg</code></li>
+</ul>
+<p>Here&rsquo;s our first problem.</p>
+<p><code>InstallInfo.plist</code> looks like this:</p>
+<pre><code>% plutil -p /Applications/Install\ macOS\ Sierra.app/Contents/SharedSupport/InstallInfo.plist
+{
+  &quot;Additional Installers&quot; =&gt; [
+  ]
+  &quot;Additional Wrapped Installers&quot; =&gt; [
+  ]
+  &quot;OS Installer&quot; =&gt; &quot;OSInstall.mpkg&quot;
+  &quot;System Image Info&quot; =&gt; {
+    &quot;id&quot; =&gt; &quot;com.apple.dmg.InstallESD&quot;
+    &quot;sha1&quot; =&gt; &quot;&quot;
+    &quot;URL&quot; =&gt; &quot;InstallESD.dmg&quot;
+    &quot;version&quot; =&gt; &quot;10.12.6&quot;
+  }
+}
+</code></pre><p><code>System Image Info -&gt; URL</code> tells us we&rsquo;re looking for <code>InstallESD.dmg</code>, and
+<code>sub_100001cb2</code> expects that path to be relative to the <code>SharedSupport</code>
+directory.  Let&rsquo;s see what&rsquo;s in <code>SharedSupport</code>:</p>
+<pre><code>% ls /Applications/Install\ macOS\ Sierra.app/Contents/SharedSupport 
+InstallInfo.plist
+</code></pre><p>D&rsquo;oh! No <code>InstallESD.dmg</code>.</p>
+<p>After a bit of head scratching, I realized that, because <code>InstallOS.pkg</code> never
+ran successfully, its <code>link_package</code> script never ran, which contains this very
+important line:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">/bin/cp <span style="color:#d14">&#34;</span><span style="color:#d14">${</span><span style="color:#008080">PACKAGE_PATH</span><span style="color:#d14">}</span><span style="color:#d14">&#34;</span> <span style="color:#d14">&#34;</span><span style="color:#d14">${</span><span style="color:#008080">SHARED_SUPPORT_PATH</span><span style="color:#d14">}</span><span style="color:#d14">/InstallESD.dmg&#34;</span>
+</code></pre></div><p>Easy fix—since we&rsquo;ve already extracted <code>InstallOS.pkg</code>, we can copy
+<code>InstallESD.dmg</code> over manually:</p>
+<pre><code>cp ~/Desktop/InstallOS/InstallOS.pkg/InstallESD.dmg \
+    /Applications/Install\ macOS\ Sierra.app/Contents/SharedSupport
+</code></pre><p>Cool, that&rsquo;s that out of the way.</p>
+<h3 id="problem-2-mismatched-bundle-version-strings">problem #2: mismatched bundle version strings</h3>
+<p>Now, at this point, you might be tempted to run <code>createinstallmedia</code> again.</p>
+<p>Don&rsquo;t do that.</p>
+<p>Without fixing one last issue, attempting to run <code>createinstallmedia</code> will cause
+it to spawn copies of itself ad infinitum until your machine runs out of RAM, or
+you <code>sudo killall -9</code> it.</p>
+<p>That&rsquo;s because of one additonal check in our friend <code>sub_100001cb2</code>. The
+pseudocode looks like this:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#900;font-weight:bold">loc_100001dc1</span>:
+    r14 <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0x0</span>;
+    rdx <span style="color:#000;font-weight:bold">=</span> rax;
+    <span style="color:#000;font-weight:bold">if</span> ([r13 <span style="color:#900;font-weight:bold">fileExistsAtPath</span>:rdx] <span style="color:#000;font-weight:bold">!=</span> <span style="color:#099">0x0</span>) {
+            rbx <span style="color:#000;font-weight:bold">=</span> [[r12 infoDictionary] <span style="color:#900;font-weight:bold">objectForKey</span>:<span style="color:#d14">@&#34;CFBundleShortVersionString&#34;</span>];
+            r14 <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0x1</span>;
+            <span style="color:#000;font-weight:bold">if</span> ([var_38 <span style="color:#900;font-weight:bold">isEqualToString</span>:<span style="color:#d14">@&#34;com.apple.InstallAssistant.Sierra&#34;</span>] <span style="color:#000;font-weight:bold">!=</span> <span style="color:#099">0x0</span>) {
+                    CMP([rbx <span style="color:#900;font-weight:bold">isEqualToString</span>:<span style="color:#d14">@&#34;12.6.03&#34;</span>], <span style="color:#099">0x1</span>);
+                    r14 <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0x1</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">0xffffffff</span> <span style="color:#000;font-weight:bold">+</span> CARRY(RFLAGS(cf));
+            }
+    }
+    rax <span style="color:#000;font-weight:bold">=</span> r14;
+    <span style="color:#000;font-weight:bold">return</span> rax;
+</code></pre></div><p><code>r13</code> is an <code>NSFileManager *</code>, rdx is <code>/Applications/Install macOS Sierra.app/Contents/SharedSupport/InstallESD.dmg</code>, and <code>var_38</code> is the bundle
+identifier of <code>Install macOS Sierra.app</code> (<code>com.apple.InstallAssistant.Sierra</code>).</p>
+<p>If <code>InstallESD.dmg</code> exists (which it should, now that we&rsquo;ve copied it into the
+app bundle), and if the bundle identifier is <code>com.apple.InstallAssistant.Sierra</code>
+(it is), then we check to see if the <code>CFBundleShortVersionString</code> is <code>12.6.03</code>.
+Depending on the result of that comparison, <code>r14</code> is set, and is then returned
+in <code>rax</code>.</p>
+<p>The Hopper-generated pseudocode for the assignment to <code>r14</code> looks a little
+weird—the assembly looks like this:</p>
+<pre><code>0000000100001e39         cmp        al, 0x1
+0000000100001e3b         mov        r14d, 0x1
+0000000100001e41         sbb        r14d, 0xffffffff
+</code></pre><p>My x86_64 assembly-fu was just rusty enough that that didn&rsquo;t make immediate
+sense to me, and I didn&rsquo;t feel like launching <code>createinstallmedia</code> under <code>lldb</code>
+to debug interactively, so I whipped up a quick test program to help me
+understand what that code was doing:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>(<span style="color:#458;font-weight:bold">int</span> argc, <span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">char</span> <span style="color:#000;font-weight:bold">*</span> argv[])
+{
+    <span style="color:#000;font-weight:bold">@autoreleasepool</span> {
+        <span style="color:#458;font-weight:bold">BOOL</span> result <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14">@&#34;12.6.03&#34;</span> <span style="color:#900;font-weight:bold">isEqualToString</span>:<span style="color:#d14">@&#34;12.6.03&#34;</span>];
+        int32_t var <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+        <span style="color:#000;font-weight:bold">asm</span> (
+            <span style="color:#d14">&#34;cmpb $0x1, %1</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>
+            <span style="color:#d14">&#34;movl $0x1, %0</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>
+            <span style="color:#d14">&#34;sbbl $0xffffffff, %0</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>
+            <span style="color:#000;font-weight:bold">:</span> <span style="color:#d14">&#34;=r&#34;</span> (var)
+            <span style="color:#000;font-weight:bold">:</span> <span style="color:#d14">&#34;r&#34;</span> (result)
+        );
+        printf(<span style="color:#d14">&#34;result: %d; var: %d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, result, var);
+    }
+    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
+}
+</code></pre></div><p>That gives us:</p>
+<pre><code>result: 1; var: 2
+</code></pre><p>Changing either of the strings in the <code>-isEqualToString:</code> comparison so that
+they <em>don&rsquo;t</em> match gives us:</p>
+<pre><code>result: 0; var: 1
+</code></pre><p>Interesting—so our validation routine at <code>sub_100001cb2</code> must be returning <code>1</code>
+or <code>2</code> (the former if the strings don&rsquo;t match, and the latter if they do match).
+Recall that if <code>sub_100001cb2</code> returns <code>0</code>, we get the <code>/Applications/Install macOS Sierra.app does not appear to be a valid OS installer application</code> error.</p>
+<p>So let&rsquo;s see if our <code>Info.plist</code> has the bundle version we&rsquo;re expecting. Survey
+says:</p>
+<pre><code>% plutil -p /Applications/Install\ macOS\ Sierra.app/Contents/Info.plist \
+    | grep CFBundleShortVersionString
+  &quot;CFBundleShortVersionString&quot; =&gt; &quot;12.6.06&quot;
+</code></pre><p>Aha! So <code>sub_100001cb2</code> must be returning <code>1</code>, which results in us jumping to
+<code>loc_1000018b7</code>, and doing this:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#900;font-weight:bold">loc_1000018b7</span>:
+    rax <span style="color:#000;font-weight:bold">=</span> [NSBundle <span style="color:#900;font-weight:bold">bundleWithPath</span>:r13];
+    rax <span style="color:#000;font-weight:bold">=</span> [rax <span style="color:#900;font-weight:bold">pathForResource</span>:<span style="color:#d14">@&#34;createinstallmedia&#34;</span> <span style="color:#900;font-weight:bold">ofType</span>:<span style="color:#099">0x0</span>];
+    var_40 <span style="color:#000;font-weight:bold">=</span> rax;
+    <span style="color:#000;font-weight:bold">if</span> (rax <span style="color:#000;font-weight:bold">!=</span> <span style="color:#099">0x0</span>) {
+            r14 <span style="color:#000;font-weight:bold">=</span> var_38 <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">0x1</span>;
+            var_30 <span style="color:#000;font-weight:bold">=</span> [NSMutableArray <span style="color:#900;font-weight:bold">arrayWithCapacity</span>:sign_extend_64(r14)];
+            <span style="color:#000;font-weight:bold">if</span> (var_38 <span style="color:#000;font-weight:bold">&gt;=</span> <span style="color:#099">0x2</span>) {
+                    rbx <span style="color:#000;font-weight:bold">=</span> rbx <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">0x8</span>;
+                    <span style="color:#000;font-weight:bold">do</span> {
+                            [var_30 <span style="color:#900;font-weight:bold">addObject</span>:[NSString <span style="color:#900;font-weight:bold">stringWithUTF8String</span>:<span style="color:#000;font-weight:bold">*</span>rbx]];
+                            rbx <span style="color:#000;font-weight:bold">=</span> rbx <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">0x8</span>;
+                            r14 <span style="color:#000;font-weight:bold">=</span> r14 <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">0x1</span>;
+                    } <span style="color:#000;font-weight:bold">while</span> (r14 <span style="color:#000;font-weight:bold">!=</span> <span style="color:#099">0x0</span>);
+            }
+            r14 <span style="color:#000;font-weight:bold">=</span> [NSTask <span style="color:#900;font-weight:bold">launchedTaskWithLaunchPath</span>:var_40 <span style="color:#900;font-weight:bold">arguments</span>:var_30];
+            [r14 waitUntilExit];
+            exit([r14 terminationStatus]);
+    }
+    <span style="color:#000;font-weight:bold">else</span> {
+            fprintf(<span style="color:#000;font-weight:bold">**</span>___stderrp, <span style="color:#d14">&#34;%s does not appear to be a valid OS installer application.</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, [r13 UTF8String]);
+            exit(<span style="color:#099">0xfffffffffffffffd</span>);
+    }
+    <span style="color:#000;font-weight:bold">return</span>;
+</code></pre></div><p>Meaning, this copy of <code>createinstallmedia</code> will spawn a copy of itself as a child
+process with identical arguments, and wait for the child to exit. Since it&rsquo;s
+been given the same arguments as its parent, the child process executes in
+exactly the same way, and ends up reaching this code, where it too spawns a copy
+of itself, and waits for <em>that</em> process to exit. And on and on&hellip; 😐</p>
+<p>Thankfully, this is also an easy fix: we can just modify <code>Install macOS Sierra.app/Contents/Info.plist</code> to have the “correct” bundle version string:</p>
+<pre><code>% sed -i '' -e 's/12\.6\.06/12.6.03/' \
+    /Applications/Install\ macOS\ Sierra.app/Contents/Info.plist
+</code></pre><p>Verify that did the trick:</p>
+<pre><code>% plutil -p /Applications/Install\ macOS\ Sierra.app/Contents/Info.plist \
+    | grep CFBundleShortVersionString
+  &quot;CFBundleShortVersionString&quot; =&gt; &quot;12.6.03&quot;
+</code></pre><p>Brilliant.</p>
+<p>Moment of truth—let&rsquo;s try running <code>createinstallmedia</code> again:</p>
+<pre><code>% sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia \
+    --volume /Volumes/Untitled \
+    --applicationpath /Applications/Install\ macOS\ Sierra.app
+Ready to start.
+To continue we need to erase the disk at /Volumes/Untitled.
+If you wish to continue type (Y) then press return:
+</code></pre><p>Yahtzee! That seems to have done the trick.</p>
+<h2 id="just-give-me-the-instructions-dammit">just give me the instructions, dammit</h2>
+<p>Note that I performed these steps on a machine running macOS Catalina (10.15.6).
+I don&rsquo;t see any reason why these steps wouldn&rsquo;t work on older versions of macOS,
+but, y&rsquo;know, YMMV.</p>
+<ul>
+<li>Download the macOS Sierra <code>InstallOS.dmg</code> from step 4 of <a href="https://support.apple.com/en-us/HT208202">this Apple support
+document</a> by clicking the <em>Download macOS Sierra</em> link</li>
+<li>Mount the newly-downloaded <code>InstallOS.dmg</code> disk image by double-clicking it</li>
+<li>Extract the contents of the installer package to your desktop:</li>
+</ul>
+<pre><code>pkgutil --expand-full /Volumes/Install\ macOS/InstallOS.pkg \
+    ~/Desktop/InstallOS
+</code></pre><ul>
+<li>Copy <code>Install macOS Sierra.app</code> to your <code>/Applications</code> folder:</li>
+</ul>
+<pre><code>sudo ditto ~/Desktop/InstallOS/InstallOS.pkg/Payload/Install\ macOS\ Sierra.app \
+    /Applications/Install\ macOS\ Sierra.app
+</code></pre><ul>
+<li>Copy <code>InstallESD.dmg</code> to the <code>SharedSupport</code> directory within the installer
+app bundle:</li>
+</ul>
+<pre><code>cp ~/Desktop/InstallOS/InstallOS.pkg/InstallESD.dmg \
+    /Applications/Install\ macOS\ Sierra.app/Contents/SharedSupport
+</code></pre><ul>
+<li>Fix the bundle version string in <code>Install macOS Sierra.app</code>&rsquo;s <code>Info.plist</code>:</li>
+</ul>
+<pre><code>sed -i '' -e 's/12\.6\.06/12.6.03/' \
+    /Applications/Install\ macOS\ Sierra.app/Contents/Info.plist
+</code></pre><ul>
+<li>Finally, run <code>createinstallmedia</code>:</li>
+</ul>
+<pre><code>sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia \
+    --volume /Volumes/Untitled \
+    --applicationpath /Applications/Install\ macOS\ Sierra.app
+</code></pre><p>The last step assumes you&rsquo;ve got your target flash drive mounted at
+<code>/Volumes/Untitled</code>. If necessary, replace that path with wherever your flash
+drive is mounted. <code>createinstallmedia</code> will format and overwrite that drive, so
+Type Carefully™.</p>
+<p>Look at you! You&rsquo;ve got the macOS Sierra installer on a bootable flash drive.</p>
+]]></content:encoded></item><item><title>&lt;![CDATA[Reading, writing, and focus atrophy]]></title><link>https://new.krieger.io/reading-writing-focus-atrophy/</link><pubDate>Mon, 04 May 2020 22:30:00 -0700</pubDate><author>cody@krieger.io (cody krieger)</author><guid>https://new.krieger.io/reading-writing-focus-atrophy/</guid><content:encoded><![CDATA[<p>I used to really enjoy reading.</p>
+<p>I never kept particularly close track of how many books I read in any given
+year, but I could easily whip through books of a few hundred pages in length in
+just a couple of days.</p>
+<p>Not so anymore—the last time I remember sitting down and finishing a book was
+years ago.</p>
+<p>Sure, I’ve made plenty of attempts since then, but I always seem to indulge in
+some distraction or another that leads me to put the book down. Then some number
+of months go by, and when I finally remember the book I’ve left unfinished, I’ve
+forgotten everything I’d read up to that point.</p>
+<p>Boom. Instantly less motivated to pick the book back up. And starting from the
+beginning feels like more effort than I’m willing to expend.</p>
+<p>I feel similarly about writing.</p>
+<p>I often think that if I wasn’t a software engineer, I’d be a writer (or maybe a
+musician if the stars were to align). But as with my reading muscle, my writing
+muscle has severely atrophied. That’s a bummer both creatively and
+professionally—especially with the explosion in remote work in the wake of the
+COVID-19 pandemic. It’s never been more important to be a great writer and
+communicator.</p>
+<p>For me, writing has always required a lot of focus and willpower, because I’m a
+bit of a perfectionist (OK…I’m a raging perfectionist). I rarely let myself get
+the words down on the page before I start editing, which slows me down
+considerably. Any of my friends that have witnessed me obsess for four hours
+over a single, simple email know what I’m talking about.</p>
+<p>Now, I find it so difficult to concentrate on reading and writing anything
+meaningful and long-form that I just don’t do it.</p>
+<p>In my case, there are at least a few factors at play, not least of which is the
+anxiety-inducing pandemic we’re all living through at present, or the fact that
+I’m still recovering from the mental and physical stress caused by the
+incredibly toxic work environment of my previous job. I think the more damning
+thing, though, is the culture of attention and outrage that we as a species have
+so successfully cultivated in recent years.</p>
+<p>Some time ago, I managed to excise Twitter and Facebook from my daily routine,
+and I’m much happier for it; you should give it a try. But the habits I formed
+stayed with me, and the empty space left by social media was quickly filled by
+Hacker News, CNN, and my pile of RSS feeds (yes, RSS feeds—RIP Google Reader,
+long live <a href="https://feedbin.com">Feedbin</a>). Even as I write this, I feel a near-constant
+anxiety and compulsive need to jump over to my web browser and check those
+sites, just in case there’s anything new to see, which is awfully draining, to
+put it lightly.  And every time my phone dings to tell me about a new message, I
+feel a Pavlovian need to pick it up and respond immediately (five times in the
+last few minutes).</p>
+<p>I had to put the fucking thing in Do Not Disturb.</p>
+<p>I might leave it that way permanently.</p>
+<p>If you’re still reading this, maybe you’re suffering a similar fate: drowning in
+distractions, having difficulty composing your thoughts, struggling to read
+anything longer than 280 characters, etc. In other words: <em>focus atrophy</em>.</p>
+<p>I don’t have any quick fixes to offer—and, accordingly, this blog post isn’t
+titled “Regain your focus and conquer inane distractions with this one weird
+trick!” However, I’m writing this in the hope that it’ll remind me what it feels
+like to focus on something creative and productive; to help me get back on the
+horse, so to speak.</p>
+<p>Try turning your phone off or putting it in Do Not Disturb, and sit down for
+some focused reading. Start that blog you’ve always wanted to start, or simply
+write in a private journal.</p>
+<p>Maybe that’ll set you in the right direction, too.</p>
+<p>Stay safe out there, folks.</p>
+]]></content:encoded></item><item><title>&lt;![CDATA[Adieu, Apple]]></title><link>https://new.krieger.io/adieu-apple/</link><pubDate>Sat, 07 Mar 2015 18:00:00 -0700</pubDate><author>cody@krieger.io (cody krieger)</author><guid>https://new.krieger.io/adieu-apple/</guid><content:encoded><![CDATA[<p>Today was my last day at Apple.</p>
+<p>I’m thrilled to announce that, effective March 9th, I’ll be joining <a href="https://evaautomation.com/">EVA
+Automation</a>, where I’ll be working on exciting as-yet-unannounced things.
+(Leaving Apple doesn’t mean I get to eschew secrecy, apparently. 😉)</p>
+<p>Words can’t easily describe how difficult it was to leave. After two summer
+internships and a two-and-a-half-year full-time stint split between the Mac and
+iOS Safari teams, Apple (and Safari) felt like home.</p>
+<p>I can’t deny, though, that I felt restrained in that role. I’ve always had
+dreams of making games (among other things), and I couldn’t do that while bound
+by a policy barring me from developing apps on my own time. Leaving Apple gives
+me that freedom once again.</p>
+<p>Of the many things I’ll miss, my brilliant teammates take the cake. I learned
+more from them, every single day, than I ever could have hoped to learn in
+school.</p>
+<p>Maybe I’ll regret leaving, but I don’t think so.</p>
+<p>I feel like this journey has only just begun.</p>
+]]></content:encoded></item></channel></rss>
