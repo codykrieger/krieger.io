@@ -14,6 +14,8 @@
     {{ $styles := resources.Get "scss/styles.scss" | toCSS $cssOptions | fingerprint -}}
     <link rel="stylesheet" type="text/css" href="{{ $styles.Permalink | relURL }}" integrity="{{ $styles.Data.Integrity }}">
 
+    <link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}rss/" title="{{ .Site.Title }}">
+
     {{- if not (in (string .Site.BaseURL) "localhost") }}
     <!-- fathom -->
     <script src="https://rhinoceros.krieger.io/script.js" site="VXRCGSRU" defer></script>
