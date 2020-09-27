@@ -1,0 +1,82 @@
+==================================================================
+https://keybase.io/cjk
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://krieger.io
+  * I am cjk (https://keybase.io/cjk) on keybase.
+  * I have a public key with fingerprint 2C41 BDAB 1CCA 6C19 E9AA  EA2B 7BB7 8ABD D378 65E5
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.7.2"
+        },
+        "key": {
+            "fingerprint": "2c41bdab1cca6c19e9aaea2b7bb78abdd37865e5",
+            "host": "keybase.io",
+            "key_id": "7BB78ABDD37865E5",
+            "uid": "21f9bfe7f49dad560c5eb5e15c573f00",
+            "username": "cjk"
+        },
+        "merkle_root": {
+            "ctime": 1412814155,
+            "hash": "e07cede801f35eca201af84eb73268958b9cf605ba5daa89c7ba707e806b22cda6dc00fd2edac014010f47ef74ed792e1d2013c84a79335446389a7f1876a151",
+            "seqno": 75471
+        },
+        "service": {
+            "hostname": "krieger.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1412814195,
+    "expire_in": 157680000,
+    "prev": "9d64860d5e33a0f6cc305af305b7dbf021da1e17a0a1e1ccc04401196428116e",
+    "seqno": 20,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG/MacGPG2 v2.0.22 (Darwin)
+
+owFdkmtMFUcUx+8FJAWkUrWSWiO62hiU4sy+ZhfbUohYUVtMIaARezM7OwvLYy/s
+vVxBuAWhajSIUmx8kMa0hoAmQI21qIgaXxXroxWr0lT7QVGoRUIqmEpbuksxfcyH
+md2Z3/zPOf8zO8IDHaHO0ratHV3FtMf5TZ/iSBO+ryxlFLdawsSVMiRPp4bX/jJw
+PmXimFxaomAPjdXdswy3SmNzPLPGmRjGR02P7jYsCsSiWJbxx9i4fVnTjSxqFpi6
+rcWwhIeKihVICBYJlKmMMcWsghQFSVhRVQ5JokAFSzLb7fH+JyozpunSVWsXJSYi
+KSFx8eIxPsnmi8YOWKjJikaRxssqVgUREIEqAoUCERCnAWCDHmqOl0Rycu1U86mZ
+m0ddpts9Vi/x6vYp5CErWZMgWMlgT7bFU4AIVakEoMYJlGAWQKxJPFUQx4qSLEiK
+TDQRCAoWVIwlmSAFI4CsC6LCskTFokoA0FSWqpgAyAMINB5RDfFURTJLoWopckTi
+MZI5TuB5kZNkjDQoIRFDAVrZe2ih4WbikMAj6Ld/TZ9OqJ22bdjzVpk6tVz/27QC
+0+11E3eetZ/t9RZ44uySvSUFNriOKq5xiUaXohuq1a1/t9MO8T87ZMsOWlygm9Sl
+24SARAlYww5EfZamrIq8JAJVoByHgSYSwgEBa9akIFXRAAtVDClEGNgLIQTwlhFQ
+FnlLH4r0nyJZS9SLsyxNj55lYG+RSRn/loAZQQ5nqCN4QoD9YB2hIRHPX3H8hQhH
+PXn7w/vZqaNLVpxJO3HnTphZeTs14vKeoQoDnOy6unZatz/+es3o+optQe23T8/e
+r+1ZfnRZZhuXP7fEsW2gZvMC52/x4XyjseouHQlo/9NsTbi089S0RxeXVvVNevLt
+CzuG5fRHr54zKlwZx2ZevZUSGXJ/sHqVtqQ52fPyU/8ZWHT0mSend7XLtb17+t3f
+P/q6+dCpgrZ9hjf4cgy9NfmZPzyS1KbsLaw+f74rKj3Ct7a8P7Ky5t6TkkFfEHwx
+IflsxkodTtn1TkPu7NRz8/JvTz4T8dqNUz9sVsu3tq45EK3uDGSiw5JeaZn/VdKE
+lPbpRZsWobKGKwkNUYlrnr7OLOwt/iVuL+jpTRiMqY7jey9fqYz6KemT7J7BpImV
+obUdfW8NXOP2dV458IV/1+jPmTe7N05L6JxTN8kVUnbj8I8NrsaB9z6W+8Hx1cHX
+vjzRuFvPTp/feWh7VevnxsT97z/oX/pmmXNiWGHXkZlTkpwv5b6R37LXUd95fak3
+mv8g2Bc+NKP7My+Nrs+JaljSsvHI8caB5jpN2pDBDy+418Q/RE21704trpr3wOnv
+PGlWHPyjbThrZN3DvpDl+HFd7Pma5pDd5XnN3z1LnnM0dsvFm3nHT2/6tTbAvKSk
+rOuV5l4PPPt40VDH4aaB1rDeoQkbVlSsv/cwc6Hv4AjpKGKPLatfqaeFfzr1wp7U
+vwA=
+=5hAi
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/cjk
+
+==================================================================
