@@ -46,8 +46,7 @@ After downloading `InstallOS.dmg` via the _Download macOS Sierra_ link in step 4
 of [this Apple support document][support-doc], I mounted the disk image, and
 attempted to run the installation package, only to be met with this dialog:
 
-![Error dialog: This version of macOS 10.12 cannot be installed on this
-computer.](/images/Screen-Shot-2020-08-24-at-6.10.56-PM.png)
+![Error dialog: This version of macOS 10.12 cannot be installed on this computer.](/images/Screen-Shot-2020-08-24-at-6.10.56-PM.png)
 
 Oops. My machine (a 2019 Mac mini) is too new to run Sierra, so the installer
 package is preventing me from even installing `Install macOS Sierra.app`.
@@ -86,7 +85,7 @@ in on the cause of the `does not appear to be a valid OS installer application`
 error message, centered around a failing validation routine called at address
 `0x1000017a3`:
 
-```asm
+```
 00000001000017a0         mov        rdi, r13
 00000001000017a3         call       sub_100001cb2
 00000001000017a8         cmp        eax, 0x1
@@ -209,7 +208,7 @@ in `rax`.
 The Hopper-generated pseudocode for the assignment to `r14` looks a little
 weird—the assembly looks like this:
 
-```asm
+```
 0000000100001e39         cmp        al, 0x1
 0000000100001e3b         mov        r14d, 0x1
 0000000100001e41         sbb        r14d, 0xffffffff
