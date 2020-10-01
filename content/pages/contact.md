@@ -10,7 +10,7 @@ Want to get in touch?
 
 <address>
     <span class="label">address:</span> <a href="mailto:cody@krieger.io">cody@krieger.io</a><br />
-    <span class="label">pgp key:</span> <a href="/pgp-key.txt" title="2C41 BDAB 1CCA 6C19 E9AA EA2B 7BB7 8ABD D378 65E5">D37865E5</a>
+    <span class="label">pgp key:</span> <a href="/pgp-key.txt">2C41 BDAB 1CCA 6C19 E9AA EA2B 7BB7 8ABD D378 65E5</a>
     (<a href="https://keybase.io/cjk">keybase</a>)
 </address>
 
