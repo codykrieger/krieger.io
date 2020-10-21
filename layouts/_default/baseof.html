@@ -16,6 +16,10 @@
 
     <link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}rss/" title="{{ .Site.Title }}">
 
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/favicon.ico">
+
     {{- if not (in (string .Site.BaseURL) "localhost") }}
     <!-- fathom -->
     <script src="https://rhinoceros.krieger.io/script.js" site="VXRCGSRU" defer></script>
